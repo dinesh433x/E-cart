@@ -1,0 +1,8 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px; /* set your actual navbar height */
+  z-index: 1000;
+}

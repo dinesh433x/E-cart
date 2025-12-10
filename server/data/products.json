@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Galaxy S21 Clone",
+    "brand": "Galaxyish",
+    "category": "Mobiles",
+    "description": "6.4 inch AMOLED, 128GB storage, 8GB RAM, great camera.",
+    "price": 24999,
+    "image": "https://via.placeholder.com/600x600.png?text=Galaxy+S21+Clone",
+    "countInStock": 25
+  },
+  {
+    "name": "Aurora Laptop 14\"",
+    "brand": "AuroraTech",
+    "category": "Laptops",
+    "description": "Lightweight 14-inch laptop, Intel i5, 512GB SSD, 16GB RAM.",
+    "price": 55999,
+    "image": "https://via.placeholder.com/600x600.png?text=Aurora+Laptop+14",
+    "countInStock": 12
+  },
+  {
+    "name": "SmartWatch X Pro",
+    "brand": "TimeX",
+    "category": "Wearables",
+    "description": "Fitness tracking, 7-day battery, water resistant.",
+    "price": 4999,
+    "image": "https://via.placeholder.com/600x600.png?text=SmartWatch+X+Pro",
+    "countInStock": 40
+  },
+  {
+    "name": "NoiseBuds True",
+    "brand": "Soundly",
+    "category": "Audio",
+    "description": "True wireless earbuds with active noise cancellation.",
+    "price": 2999,
+    "image": "https://via.placeholder.com/600x600.png?text=NoiseBuds+True",
+    "countInStock": 60
+  },
+  {
+    "name": "4K Ultra Smart TV 43\"",
+    "brand": "ViewMax",
+    "category": "Televisions",
+    "description": "43-inch 4K smart TV with HDR and built-in apps.",
+    "price": 28999,
+    "image": "https://via.placeholder.com/600x600.png?text=4K+Ultra+TV+43",
+    "countInStock": 8
+  },
+  {
+    "name": "KitchenPro Mixer",
+    "brand": "CookMate",
+    "category": "Home Appliances",
+    "description": "5-speed mixer with stainless steel bowl, 1000W motor.",
+    "price": 3999,
+    "image": "https://via.placeholder.com/600x600.png?text=KitchenPro+Mixer",
+    "countInStock": 30
+  },
+  {
+    "name": "Comfort Sofa 3-seater",
+    "brand": "HomeLux",
+    "category": "Furniture",
+    "description": "Modern 3-seater sofa with foam cushions and washable cover.",
+    "price": 25999,
+    "image": "https://via.placeholder.com/600x600.png?text=Comfort+Sofa+3-seater",
+    "countInStock": 5
+  },
+  {
+    "name": "Backpack Traveler 40L",
+    "brand": "Roamer",
+    "category": "Bags",
+    "description": "40L travel backpack, water resistant, multiple compartments.",
+    "price": 2499,
+    "image": "https://via.placeholder.com/600x600.png?text=Backpack+Traveler+40L",
+    "countInStock": 45
+  },
+  {
+    "name": "Gaming Mouse V2",
+    "brand": "ProGamer",
+    "category": "Gaming",
+    "description": "Ergonomic wired gaming mouse, 16000 DPI, RGB lighting.",
+    "price": 1799,
+    "image": "https://via.placeholder.com/600x600.png?text=Gaming+Mouse+V2",
+    "countInStock": 100
+  },
+  {
+    "name": "Classic Leather Wallet",
+    "brand": "Leatherly",
+    "category": "Accessories",
+    "description": "Genuine leather wallet with 6 card slots and coin pocket.",
+    "price": 899,
+    "image": "https://via.placeholder.com/600x600.png?text=Classic+Leather+Wallet",
+    "countInStock": 75
+  }
+]
