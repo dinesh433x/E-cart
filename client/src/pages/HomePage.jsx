@@ -3,6 +3,7 @@ import BannerGrid from "../components/BannerGrid";
 import ProductCarousel from "../components/ProductCarousel";
 
 
+
 const slides = [
   { id: 1, image: "/banners/1.webp", alt: "Big Sale 1" },
   { id: 2, image: "/banners/2.webp", alt: "Big Sale 2" },
@@ -17,8 +18,7 @@ export default function HomePage() {
     <div style={{ paddingTop:64, margin:0, marginTop:12 }}>
       <Carousel slides={slides} height={211} /> 
       <BannerGrid />
-      <ProductCarousel />   
-     
+      <ProductCarousel />        
     </div>
     
   );

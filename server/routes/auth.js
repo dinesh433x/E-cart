@@ -5,18 +5,19 @@ import jwt from "jsonwebtoken";
 const router = express.Router();
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
-};
+  return jwt.sign({ id }, process.env.JWT_SECRET,  { expiresIn: "30d" });
+}; 
 
-// SIGNUP
+// singup
 router.post("/signup", async (req, res) => {
+  
   const { name, email, password } = req.body;
   try {
     const exists = await User.findOne({ email });
     if (exists) return res.status(400).json({ message: "User already exists" });
 
     const user = await User.create({ name, email, password });
-
+    
     res.json({ 
       _id: user._id,
       name: user.name,
@@ -24,12 +25,12 @@ router.post("/signup", async (req, res) => {
       token: generateToken(user._id)
     });
   } catch (err) {
-     console.error("SignUp ERROR:", err);    // ✅ ADD THIS
+     console.error("SignUp ERROR:", err);    
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// LOGIN
+// login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 

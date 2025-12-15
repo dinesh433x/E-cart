@@ -45,7 +45,7 @@ export default function LoginPage() {
       const bodyData = isSignup
         ? { name, email, password }
         : { email, password };
-
+               
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -58,12 +58,12 @@ export default function LoginPage() {
         throw new Error(data.message || "Authentication failed");
       }
 
-      // ✅ Save token + user in localStorage
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      window.dispatchEvent(new Event("authChanged"));
-      console.log(isSignup ? "Signup Success:" : "Login Success:", data);
+      //Save token + user in localStorage
+       localStorage.setItem("userInfo", JSON.stringify(data));
+       window.dispatchEvent(new Event("authChanged"));
+       console.log(isSignup ? "Signup Success:" : "Login Success:", data);
 
-      // ✅ Redirect to home
+      //Redirect to home
       navigate("/");
     } catch (err) {
       setError(err.message || "Something went wrong");
@@ -74,13 +74,14 @@ export default function LoginPage() {
 
   return (
     <Box
-      sx={{
+      sx={{ 
         minHeight: "100vh",
         bgcolor: "#f1f3f6",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        py: 7,
+        pt:7,
+        pd:1.5
       }}
     >
       <Container maxWidth="lg" sx={{ display: "flex", justifyContent: "center" }}>
@@ -93,7 +94,7 @@ export default function LoginPage() {
             overflow: "hidden",
           }}
         >
-          {/* ✅ LEFT BLUE SECTION */}
+          {/* left sec */}
           <Box
             sx={{
               width: { xs: 260, sm: 320 },
@@ -120,24 +121,24 @@ export default function LoginPage() {
             
           </Box>
 
-          {/* ✅ RIGHT WHITE SECTION */}
+          {/* right sec*/}
           <Box sx={{ flex: 1, p: { xs: 3, md: 6 }, bgcolor: "#fff" }}>
             <form onSubmit={handleSubmit} style={{ height: "100%" }}>
               <Stack spacing={3} sx={{ height: "100%" }}>
                 {error && <Alert severity="error">{error}</Alert>}
 
-                <Box>
-                  {/* ✅ NAME FIELD (SIGNUP ONLY) */}
-                  {isSignup && (
-                    <TextField
-                      label="Enter Full Name"
-                      variant="standard"
-                      fullWidth
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      sx={{ mb: 3 }}
-                    />
-                  )}
+                  <Box>
+                    {/* name field(signup) */}
+                    {isSignup && (
+                      <TextField
+                        label="Enter Full Name"
+                        variant="standard"
+                        fullWidth
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        sx={{ mb: 3 }}
+                      />
+                    )}
 
                   <TextField
                     label="Enter Email"
@@ -208,7 +209,7 @@ export default function LoginPage() {
 
                 <Divider />
 
-                {/* ✅ TOGGLE LOGIN / SIGNUP */}
+                {/* toggle login, signup */}
                 <Box sx={{ textAlign: "center" }}>
                   <Link
                     component="button"

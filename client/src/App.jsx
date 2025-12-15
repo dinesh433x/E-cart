@@ -12,7 +12,7 @@ import ProductDetails from './components/ProductDetails';
 export default function App() {
   return (
     <>
-      <Navbar />
+      <Navbar /> 
       
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -22,6 +22,7 @@ export default function App() {
           <Route path="/categories" element={<CategoryPage />} />
           
         </Routes>
+        
         
         <Footer />
       

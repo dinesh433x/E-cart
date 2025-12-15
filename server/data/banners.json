@@ -1,0 +1,39 @@
+[
+  {
+    "brandLabel": "Bajaj, Havells & more",
+    "title": "Heating appliances",
+    "price": "From ₹299",
+    "image": "/bann/heater.png"
+  },
+  {
+    "brandLabel": "Samsung, IFB, LG, Whirlpool...",
+    "title": "Washing machines",
+    "price": "From ₹6,790*",
+    "image": "/bann/washingmachine.png"
+  },
+  {
+    "brandLabel": "India's Most Wanted Deal",
+    "title": "Galaxy S24 Snapdragon",
+    "price": "From ₹40,999",
+    "originalPrice": "₹74,999",
+    "image": "/bann/phone.png"
+  },
+  {
+    "brandLabel": "Top rated earphones",
+    "title": "realme, GOBOULT & more",
+    "price": "From ₹699",
+    "image": "/bann/earphones.png"
+  },
+  {
+    "brandLabel": "Lowest price ever!",
+    "title": "HP i3 & Core 3",
+    "price": "From ₹34,499*",
+    "image": "/bann/laptop.png"
+  },
+  {
+    "brandLabel": "Too comfy to miss!",
+    "title": "Kurta sets",
+    "price": "Min. 70% Off",
+    "image": "/bann/kurta.png"
+  }
+]
