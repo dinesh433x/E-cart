@@ -33,4 +33,16 @@ const productSlice = createSlice({
   },
 });
 
+
+
+export const fetchCategories = createAsyncThunk(
+  "products/fetchCategories",
+  async () => {
+    const { data } = await axios.get(
+      "http://localhost:5000/api/products/categories"
+    );
+    return data ;
+  }
+);
+
 export default productSlice.reducer;

@@ -3,29 +3,6 @@ import express from "express";
 import Product from "../models/Product.js";
 
 const router = express.Router();
-
-// /**
-//  * DEV ONLY: POST /api/products/seed
-//  * Body: array of product objects
-//  */
-// router.post("/seed", async (req, res) => {
-//   try {
-//     const productsArray = req.body;
-//     if (!Array.isArray(productsArray) || productsArray.length === 0) {
-//       return res.status(400).json({ message: "Send a non-empty array in request body" });
-//     }
-
-//     ;
-
-//     const created = await Product.insertMany(productsArray);
-//     return res.status(201).json({ insertedCount: created.length, created });
-//   } catch (err) {
-//     console.error("Seed error:", err);
-//     return res.status(500).json({ message: "Seed failed", error: err.message });
-//   }
-// });
-
-
 /**
  * GET /api/products/:id
  * Returns single product by id
@@ -49,7 +26,7 @@ router.get("/", async (req, res) => {
 
 
 
-// GET /api/products/suggest?search=gal
+// suggest?search=gal
 router.get("/suggest", async (req, res) => {
   try {
     const search = req.query.search;
@@ -66,15 +43,53 @@ router.get("/suggest", async (req, res) => {
 });
 
 
-
-router.delete("/", async (req, res) => {
+// GET all unique categories
+router.get("/categories", async (req, res) => {
   try {
-    await Product.deleteMany({});
-    res.json({ message: "All products deleted" });
+    const categories = await Product.distinct("category");
+    res.json(categories);
   } catch (err) {
-    console.error("Delete products error:", err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Failed to fetch categories" });
   }
 });
+
+
+
+
+// router.delete("/", async (req, res) => {
+//   try {
+//     await Product.deleteMany({});
+//     res.json({ message: "All products deleted" });
+//   } catch (err) {
+//     console.error("Delete products error:", err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+
+
+
+// /**
+//  * DEV ONLY: POST /api/products/seed
+//  * Body: array of product objects
+//  */
+// router.post("/seed", async (req, res) => {
+//   try {
+//     const productsArray = req.body;
+//     if (!Array.isArray(productsArray) || productsArray.length === 0) {
+//       return res.status(400).json({ message: "Send a non-empty array in request body" });
+//     }
+
+//     ;
+
+//     const created = await Product.insertMany(productsArray);
+//     return res.status(201).json({ insertedCount: created.length, created });
+//   } catch (err) {
+//     console.error("Seed error:", err);
+//     return res.status(500).json({ message: "Seed failed", error: err.message });
+//   }
+// });
+
+
 
 export default router;
