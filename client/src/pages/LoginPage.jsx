@@ -19,6 +19,9 @@ import { useNavigate } from "react-router-dom";
 export default function LoginPage() {
   const navigate = useNavigate();
 
+
+  
+
   const [isSignup, setIsSignup] = useState(false);
   const [name, setName] = useState(""); 
   const [email, setEmail] = useState("");

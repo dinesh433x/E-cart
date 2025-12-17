@@ -4,6 +4,7 @@ import ProductCarousel from "../components/ProductCarousel";
 
 
 
+
 const slides = [
   { id: 1, image: "/banners/1.webp", alt: "Big Sale 1" },
   { id: 2, image: "/banners/2.webp", alt: "Big Sale 2" },

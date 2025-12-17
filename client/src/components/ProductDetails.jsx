@@ -97,31 +97,8 @@ const ProductDetails = () => {
       <CssBaseline />
 
       <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
-        <Container maxWidth="xl" sx={{ py: 2 }}>
-          {/* Breadcrumb */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 2,
-            }}
-          >
-            <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-              <Link underline="hover" color="text.secondary" href="/">
-                Home
-              </Link>
-              <Typography color="text.primary">{product.name}</Typography>
-            </Breadcrumbs>
-
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <Checkbox size="small" />
-              <Typography variant="body2" color="text.secondary">
-                Compare
-              </Typography>
-              <Share sx={{ fontSize: 18, color: "#878787" }} />
-            </Box>
-          </Box>
+        <Container maxWidth="xl" sx={{  py:8}}>
+          
 
           <Box sx={{ display: "flex", gap: 3 }}>
             {/* LEFT IMAGE */}

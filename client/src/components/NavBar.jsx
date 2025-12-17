@@ -19,14 +19,27 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
-
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { fetchProducts } from "../redux/productSlice"; 
 
 export default function Navbar() {
   const navigate = useNavigate();
 
+
   const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useDispatch();
+
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  
+
+
+  
 
   const open = Boolean(anchorEl);
 
@@ -126,25 +139,90 @@ export default function Navbar() {
 
 
         {/* SEARCH BAR */}
-        <Box sx={{ flexGrow: 1, maxWidth: 550 }}>
-          <TextField
-            size="small"
-            placeholder="Search for Products, Brands and More"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: "#878787" }} />
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                background: "#f5f5f6",
-                borderRadius: "4px",
-              },
-            }}
-          />
+        <Box sx={{ flexGrow: 1, maxWidth: 550, position: "relative" }}>
+
+           <TextField
+                  size="small"
+                  fullWidth
+                  value={searchTerm}
+                  onBlur={() => {
+                    setTimeout(() => setShowSuggestions(false), 50);
+                  }}
+                  onChange={async (e) => {
+                            const value = e.target.value;
+                            setSearchTerm(value);
+
+                            if (value.length < 2) {
+                              setSuggestions([]);
+                              return;
+                            }
+
+                            const res = await fetch(
+                              `http://localhost:5000/api/products/suggest?search=${value}`
+                            );
+                            const data = await res.json();
+                            setSuggestions(data);
+                            setShowSuggestions(true);
+                          }}
+
+                  placeholder="Search for Products, Brands and More"
+                  onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              setShowSuggestions(false); // ✅ hide dropdown
+                              dispatch(fetchProducts({ search: searchTerm }));
+                              navigate("/");
+                            }
+                          }}
+
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon sx={{ color: "#878787" }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      background: "#f5f5f6",
+                      borderRadius: "4px",
+                    },
+                  }}
+            />
+            {showSuggestions && suggestions.length > 0 && (
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: "100%",
+                            left: 0,
+                            right: 0,
+                            background: "#fff",
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                            zIndex: 1300,
+                            borderRadius: 1,
+                          }}
+                        >
+                          {suggestions.map((item) => (
+                            <Box
+                              key={item._id}
+                              sx={{
+                                px: 2,
+                                py: 1,
+                                cursor: "pointer",
+                                "&:hover": { background: "#f5f5f5" },
+                              }}
+                              onClick={() => {
+                                setSearchTerm(item.name);
+                                setShowSuggestions(false);
+                                dispatch(fetchProducts({ search: item.name }));
+                                navigate(`/product/${item._id}`);
+                              }}
+                            >
+                              {item.name}
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
+
         </Box>
 
         {/* LOGIN / USER */}

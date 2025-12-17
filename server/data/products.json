@@ -1,92 +1,223 @@
 [
   {
-    "name": "Galaxy S21 Clone",
+    "name": "Galaxy S21 FE",
     "brand": "Galaxyish",
     "category": "Mobiles",
     "description": "6.4 inch AMOLED, 128GB storage, 8GB RAM, great camera.",
     "price": 24999,
-    "image": "https://via.placeholder.com/600x600.png?text=Galaxy+S21+Clone",
+    "image": "/prod/1.webp",
     "countInStock": 25
   },
   {
-    "name": "Aurora Laptop 14\"",
-    "brand": "AuroraTech",
-    "category": "Laptops",
-    "description": "Lightweight 14-inch laptop, Intel i5, 512GB SSD, 16GB RAM.",
-    "price": 55999,
-    "image": "https://via.placeholder.com/600x600.png?text=Aurora+Laptop+14",
-    "countInStock": 12
+    "name": "iFruit X12",
+    "brand": "iFruit",
+    "category": "Mobiles",
+    "description": "6.1 inch OLED display, 128GB storage, smooth performance.",
+    "price": 69999,
+    "image": "/prod/2.webp",
+    "countInStock": 15
   },
   {
-    "name": "SmartWatch X Pro",
-    "brand": "TimeX",
-    "category": "Wearables",
-    "description": "Fitness tracking, 7-day battery, water resistant.",
-    "price": 4999,
-    "image": "https://via.placeholder.com/600x600.png?text=SmartWatch+X+Pro",
-    "countInStock": 40
-  },
-  {
-    "name": "NoiseBuds True",
-    "brand": "Soundly",
-    "category": "Audio",
-    "description": "True wireless earbuds with active noise cancellation.",
-    "price": 2999,
-    "image": "https://via.placeholder.com/600x600.png?text=NoiseBuds+True",
-    "countInStock": 60
-  },
-  {
-    "name": "4K Ultra Smart TV 43\"",
-    "brand": "ViewMax",
-    "category": "Televisions",
-    "description": "43-inch 4K smart TV with HDR and built-in apps.",
-    "price": 28999,
-    "image": "https://via.placeholder.com/600x600.png?text=4K+Ultra+TV+43",
-    "countInStock": 8
-  },
-  {
-    "name": "KitchenPro Mixer",
-    "brand": "CookMate",
-    "category": "Home Appliances",
-    "description": "5-speed mixer with stainless steel bowl, 1000W motor.",
-    "price": 3999,
-    "image": "https://via.placeholder.com/600x600.png?text=KitchenPro+Mixer",
+    "name": "OnePlus Nord CE",
+    "brand": "OnePlus",
+    "category": "Mobiles",
+    "description": "6.43 inch AMOLED, Snapdragon processor, fast charging.",
+    "price": 22999,
+    "image": "/prod/3.png",
     "countInStock": 30
   },
   {
-    "name": "Comfort Sofa 3-seater",
-    "brand": "HomeLux",
-    "category": "Furniture",
-    "description": "Modern 3-seater sofa with foam cushions and washable cover.",
-    "price": 25999,
-    "image": "https://via.placeholder.com/600x600.png?text=Comfort+Sofa+3-seater",
-    "countInStock": 5
+    "name": "Redmi Note 13",
+    "brand": "Redmi",
+    "category": "Mobiles",
+    "description": "120Hz display, 128GB storage, budget friendly phone.",
+    "price": 17999,
+    "image": "/prod/4.webp",
+    "countInStock": 40
+  },
+
+  {
+    "name": "MacBook Air M2",
+    "brand": "Apple",
+    "category": "Laptop",
+    "description": "13.6 inch display, M2 chip, lightweight and powerful.",
+    "price": 114999,
+    "image": "/prod/5.webp",
+    "countInStock": 10
   },
   {
-    "name": "Backpack Traveler 40L",
-    "brand": "Roamer",
-    "category": "Bags",
-    "description": "40L travel backpack, water resistant, multiple compartments.",
-    "price": 2499,
-    "image": "https://via.placeholder.com/600x600.png?text=Backpack+Traveler+40L",
+    "name": "Dell Inspiron 15",
+    "brand": "Dell",
+    "category": "Laptop",
+    "description": "15.6 inch display, Intel i5, 16GB RAM.",
+    "price": 65999,
+    "image": "/prod/6.webp",
+    "countInStock": 18
+  },
+  {
+    "name": "HP Pavilion x360",
+    "brand": "HP",
+    "category": "Laptop",
+    "description": "Convertible laptop, touchscreen, Intel i5.",
+    "price": 74999,
+    "image": "/prod/7.jpg",
+    "countInStock": 12
+  },
+  {
+    "name": "Lenovo IdeaPad Slim 5",
+    "brand": "Lenovo",
+    "category": "Laptop",
+    "description": "Slim design, Ryzen 5 processor, 512GB SSD.",
+    "price": 58999,
+    "image": "/prod/8.webp",
+    "countInStock": 20
+  },
+
+  {
+    "name": "Sony Bluetooth Speaker",
+    "brand": "Sony",
+    "category": "Electronics",
+    "description": "Portable speaker with deep bass and clear sound.",
+    "price": 4999,
+    "image": "/prod/9.webp",
+    "countInStock": 35
+  },
+  {
+    "name": "Boat Rockerz Headphones",
+    "brand": "Boat",
+    "category": "Electronics",
+    "description": "Wireless headphones with long battery life.",
+    "price": 2999,
+    "image": "/prod/10.webp",
+    "countInStock": 50
+  },
+  {
+    "name": "Canon DSLR Camera",
+    "brand": "Canon",
+    "category": "Electronics",
+    "description": "24MP DSLR camera, ideal for photography.",
+    "price": 45999,
+    "image": "/prod/11.webp",
+    "countInStock": 8
+  },
+  {
+    "name": "Samsung Smart Watch",
+    "brand": "Samsung",
+    "category": "Electronics",
+    "description": "Fitness tracking, heart rate monitor, AMOLED display.",
+    "price": 14999,
+    "image": "/prod/12.webp",
+    "countInStock": 22
+  },
+
+  {
+    "name": "LG Double Door Fridge",
+    "brand": "LG",
+    "category": "Home Appliance",
+    "description": "260L refrigerator with inverter compressor.",
+    "price": 28999,
+    "image": "/prod/13.webp",
+    "countInStock": 14
+  },
+  {
+    "name": "Samsung Washing Machine",
+    "brand": "Samsung",
+    "category": "Home Appliance",
+    "description": "Fully automatic washing machine, 7kg capacity.",
+    "price": 23999,
+    "image": "/prod/14.webp",
+    "countInStock": 16
+  },
+  {
+    "name": "Philips Mixer Grinder",
+    "brand": "Philips",
+    "category": "Home Appliance",
+    "description": "750W powerful motor, 3 jars included.",
+    "price": 4999,
+    "image": "/prod/15.webp",
+    "countInStock": 28
+  },
+  {
+    "name": "IFB Microwave Oven",
+    "brand": "IFB",
+    "category": "Home Appliance",
+    "description": "30L convection microwave with auto cook menu.",
+    "price": 15999,
+    "image": "/prod/16.webp",
+    "countInStock": 11
+  },
+
+  {
+    "name": "Wooden Sofa Set",
+    "brand": "HomeDeco",
+    "category": "Furniture",
+    "description": "5-seater wooden sofa with cushions.",
+    "price": 45999,
+    "image": "/prod/17.webp",
+    "countInStock": 6
+  },
+  {
+    "name": "Queen Size Bed",
+    "brand": "SleepWell",
+    "category": "Furniture",
+    "description": "Engineered wood bed with storage.",
+    "price": 32999,
+    "image": "/prod/18.webp",
+    "countInStock": 9
+  },
+  {
+    "name": "Dining Table Set",
+    "brand": "UrbanLiving",
+    "category": "Furniture",
+    "description": "4-seater dining table with chairs.",
+    "price": 24999,
+    "image": "/prod/19.webp",
+    "countInStock": 7
+  },
+  {
+    "name": "Ergonomic Office Chair",
+    "brand": "ComfortSeat",
+    "category": "Furniture",
+    "description": "Ergonomic office chair with lumbar support.",
+    "price": 8999,
+    "image": "/prod/20.webp",
+    "countInStock": 20
+  },
+
+  {
+    "name": "Ergonomic Wireless Mouse",
+    "brand": "LogiTech",
+    "category": "Accessories",
+    "description": "Ergonomic wireless mouse with long battery life.",
+    "price": 1299,
+    "image": "/prod/21.webp",
+    "countInStock": 60
+  },
+  {
+    "name": "RGB Mechanical Keyboard",
+    "brand": "KeyPro",
+    "category": "Accessories",
+    "description": "RGB mechanical keyboard with blue switches.",
+    "price": 3999,
+    "image": "/prod/22.webp",
+    "countInStock": 25
+  },
+  {
+    "name": "ATris Laptop Backpack",
+    "brand": "SkyBags",
+    "category": "Accessories",
+    "description": "Water-resistant backpack with laptop compartment.",
+    "price": 1999,
+    "image": "/prod/23.webp",
     "countInStock": 45
   },
   {
-    "name": "Gaming Mouse V2",
-    "brand": "ProGamer",
-    "category": "Gaming",
-    "description": "Ergonomic wired gaming mouse, 16000 DPI, RGB lighting.",
-    "price": 1799,
-    "image": "https://via.placeholder.com/600x600.png?text=Gaming+Mouse+V2",
-    "countInStock": 100
-  },
-  {
-    "name": "Classic Leather Wallet",
-    "brand": "Leatherly",
+    "name": "E-cart Fast Charging Cable",
+    "brand": "ChargeX",
     "category": "Accessories",
-    "description": "Genuine leather wallet with 6 card slots and coin pocket.",
-    "price": 899,
-    "image": "https://via.placeholder.com/600x600.png?text=Classic+Leather+Wallet",
-    "countInStock": 75
+    "description": "Type-C fast charging cable, durable build.",
+    "price": 499,
+    "image": "/prod/24.webp",
+    "countInStock": 100
   }
 ]
