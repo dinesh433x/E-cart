@@ -6,10 +6,19 @@ import LoginPage from "./pages/LoginPage";
 import CartPage from "./pages/CartPage";
 import CategoryPage from "./pages/CategoryPage";
 import ProductDetails from './components/ProductDetails';
+import { useDispatch } from "react-redux";
+import { fetchCategories } from "./redux/productSlice";
+import { useEffect } from "react";
 
 
 
 export default function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
   return (
     <>
       <Navbar /> 

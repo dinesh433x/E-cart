@@ -23,12 +23,17 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchProducts } from "../redux/productSlice"; 
 
+
+
 export default function Navbar() {
   const navigate = useNavigate();
 
 
   const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const [categories, setCategories] = useState([]);
+  
 
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
@@ -52,6 +57,15 @@ export default function Navbar() {
       } else {
         setUser(null);
       }
+
+      
+          const fetchCategories = async () => {
+            const res = await fetch("http://localhost:5000/api/products/categories");
+            const data = await res.json();
+            setCategories(data);
+          };
+          fetchCategories();
+        
     };
 
     loadUser();
@@ -146,29 +160,52 @@ export default function Navbar() {
                   fullWidth
                   value={searchTerm}
                   onBlur={() => {
-                    setTimeout(() => setShowSuggestions(false), 50);
+                    setTimeout(() => setShowSuggestions(false), 2000);
                   }}
-                  onChange={async (e) => {
+                 onChange={async (e) => {
                             const value = e.target.value;
                             setSearchTerm(value);
 
                             if (value.length < 2) {
                               setSuggestions([]);
+                              setShowSuggestions(false);
                               return;
                             }
 
+                            // 🔥 CATEGORY MATCH (partial)
+                            const matchedCategory = categories.find(cat =>
+                              cat.toLowerCase().includes(value.toLowerCase())
+                            );
+
+                            if (matchedCategory) {
+                              // 👉 fetch ALL products of that category for dropdown
+                              const res = await fetch(
+                                `http://localhost:5000/api/products?category=${matchedCategory}`
+                              );
+                              const categoryProducts = await res.json();
+
+                              setSuggestions(categoryProducts);
+                              setShowSuggestions(true);
+                              return;
+                            }
+
+                            // 🔍 PRODUCT SEARCH (existing logic)
                             const res = await fetch(
                               `http://localhost:5000/api/products/suggest?search=${value}`
                             );
-                            const data = await res.json();
-                            setSuggestions(data);
+                            const products = await res.json();
+
+                            setSuggestions(products);
                             setShowSuggestions(true);
                           }}
+
+
+
 
                   placeholder="Search for Products, Brands and More"
                   onKeyDown={(e) => {
                             if (e.key === "Enter") {
-                              setShowSuggestions(false); // ✅ hide dropdown
+                              setShowSuggestions(false);
                               dispatch(fetchProducts({ search: searchTerm }));
                               navigate("/");
                             }
@@ -189,39 +226,41 @@ export default function Navbar() {
                   }}
             />
             {showSuggestions && suggestions.length > 0 && (
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            top: "100%",
-                            left: 0,
-                            right: 0,
-                            background: "#fff",
-                            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                            zIndex: 1300,
-                            borderRadius: 1,
-                          }}
-                        >
-                          {suggestions.map((item) => (
-                            <Box
-                              key={item._id}
-                              sx={{
-                                px: 2,
-                                py: 1,
-                                cursor: "pointer",
-                                "&:hover": { background: "#f5f5f5" },
-                              }}
-                              onClick={() => {
-                                setSearchTerm(item.name);
-                                setShowSuggestions(false);
-                                dispatch(fetchProducts({ search: item.name }));
-                                navigate(`/product/${item._id}`);
-                              }}
-                            >
-                              {item.name}
-                            </Box>
-                          ))}
-                        </Box>
-                      )}
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          top: "100%",
+                          left: 0,
+                          right: 0,
+                          background: "#fff",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                          zIndex: 1300,
+                          borderRadius: 1,
+                        }}
+                      >
+                        {suggestions.map((item) => (
+                          <Box
+                            key={item._id}
+                            sx={{
+                              px: 2,
+                              py: 1,
+                              cursor: "pointer",
+                              "&:hover": { background: "#f5f5f5" },
+                            }}
+                            onMouseDown={() => {
+  setSearchTerm(item.name);
+  setShowSuggestions(false);
+  navigate(`/product/${item._id}`);
+}}
+
+
+                          >
+                            {item.name}
+                          </Box>
+                        ))}
+                      </Box>
+                    )}
+
 
         </Box>
 
