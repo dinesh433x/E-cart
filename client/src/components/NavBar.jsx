@@ -115,8 +115,8 @@ export default function Navbar() {
         sx={{
           cursor: "pointer",
           display: "flex",
-          flexDirection: "column",   // ✅ FORCE VERTICAL
-          alignItems: "flex-start", // ✅ LEFT ALIGN BOTH LINES
+          flexDirection: "column",   
+          alignItems: "flex-start", 
         }}
       >
         {/* Main Logo */}
@@ -138,7 +138,7 @@ export default function Navbar() {
             display: "flex",
             alignItems: "center",
             gap: 0.3,
-            mt: 0.2, // ✅ small top margin so it sits clearly below
+            mt: 0.2, 
           }}
         >
           <Typography sx={{ fontSize: "12px", color: "#878787" }}>

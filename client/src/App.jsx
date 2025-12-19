@@ -4,7 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import CartPage from "./pages/CartPage";
-import CategoryPage from "./pages/CategoryPage";
+import CategoryPage from "./pages/CategoriesPage";
+import CategoryProductsPage from "./pages/CategoryProductsPage";
 import ProductDetails from './components/ProductDetails';
 import { useDispatch } from "react-redux";
 import { fetchCategories } from "./redux/productSlice";
@@ -23,13 +24,14 @@ export default function App() {
     <>
       <Navbar /> 
         <div style={{ paddingTop: "6px" }}>
-        <Routes>
+        <Routes >
           
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/categories" element={<CategoryPage />} />
+          <Route path="/category/:categoryName" element={<CategoryProductsPage />} />
           
         </Routes>
         </div>        

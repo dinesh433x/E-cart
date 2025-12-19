@@ -97,7 +97,7 @@ const ProductDetails = () => {
       <CssBaseline />
 
       <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
-        <Container maxWidth="xl" sx={{  pt:8}}>
+        <Container maxWidth="xl" sx={{  pt:8 }}>
           
 
           <Box sx={{ display: "flex", gap: 3 }}>

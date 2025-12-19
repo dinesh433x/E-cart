@@ -49,4 +49,8 @@ export const fetchCategories = createAsyncThunk(
   }
 );
 
+
+
+
+
 export default productSlice.reducer;
