@@ -20,9 +20,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { fetchProducts } from "../redux/productSlice"; 
-
 
 
 export default function Navbar() {
@@ -36,12 +33,12 @@ export default function Navbar() {
   
 
   const [searchTerm, setSearchTerm] = useState("");
-  const dispatch = useDispatch();
+  
 
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  
+  const [activeIndex, setActiveIndex] = useState(-1);
 
 
   
@@ -132,7 +129,7 @@ export default function Navbar() {
           E-cart
         </Typography>
 
-        {/* ✅ Tagline BELOW the logo */}
+        {/*  Tagline BELOW the logo */}
         <Box
           sx={{
             display: "flex",
@@ -152,119 +149,168 @@ export default function Navbar() {
       </Box>
 
 
-        {/* SEARCH BAR */}
-        <Box sx={{ flexGrow: 1, maxWidth: 550, position: "relative" }}>
+       {/*search box*/}
+          <Box sx={{ flexGrow: 1, maxWidth: 550, position: "relative" }}>
+            <TextField
+              size="small"
+              fullWidth
+              value={searchTerm}
+              placeholder="Search for Products, Brands and More"
+              onBlur={() => {
+                setTimeout(() => setShowSuggestions(false), 200);
+              }}
+              onChange={async (e) => {
+                const value = e.target.value;
+                setSearchTerm(value);
 
-           <TextField
-                  size="small"
-                  fullWidth
-                  value={searchTerm}
-                  onBlur={() => {
-                    setTimeout(() => setShowSuggestions(false), 2000);
-                  }}
-                 onChange={async (e) => {
-                            const value = e.target.value;
-                            setSearchTerm(value);
+                if (value.length < 2) {
+                  setSuggestions([]);
+                  setShowSuggestions(false);
+                  setActiveIndex(-1);
+                  return;
+                }
 
-                            if (value.length < 2) {
-                              setSuggestions([]);
-                              setShowSuggestions(false);
-                              return;
-                            }
+                // partial category search
+                const matchedCategory = categories.find((cat) =>
+                  cat.toLowerCase().includes(value.toLowerCase())
+                );
 
-                            // 🔥 CATEGORY MATCH (partial)
-                            const matchedCategory = categories.find(cat =>
-                              cat.toLowerCase().includes(value.toLowerCase())
-                            );
+                if (matchedCategory) {
+                  const categoryItem = {
+                    type: "category",
+                    name: matchedCategory,
+                  };
 
-                            if (matchedCategory) {
-                              // 👉 fetch ALL products of that category for dropdown
-                              const res = await fetch(
-                                `http://localhost:5000/api/products?category=${matchedCategory}`
-                              );
-                              const categoryProducts = await res.json();
+                  const res = await fetch(
+                    `http://localhost:5000/api/products?category=${matchedCategory}`
+                  );
+                  const categoryProducts = await res.json();
 
-                              setSuggestions(categoryProducts);
-                              setShowSuggestions(true);
-                              return;
-                            }
+                  const productItems = categoryProducts.map((p) => ({
+                    type: "product",
+                    _id: p._id,
+                    name: p.name,
+                  }));
 
-                            // 🔍 PRODUCT SEARCH (existing logic)
-                            const res = await fetch(
-                              `http://localhost:5000/api/products/suggest?search=${value}`
-                            );
-                            const products = await res.json();
+                  setSuggestions([categoryItem, ...productItems]);
+                  setShowSuggestions(true);
+                  setActiveIndex(-1);
+                  return;
+                }
 
-                            setSuggestions(products);
-                            setShowSuggestions(true);
-                          }}
+                // prod search
+                const res = await fetch(
+                  `http://localhost:5000/api/products/suggest?search=${value}`
+                );
+                const products = await res.json();
 
+                setSuggestions(
+                  products.map((p) => ({
+                    type: "product",
+                    _id: p._id,
+                    name: p.name,
+                  }))
+                );
+                setShowSuggestions(true);
+                setActiveIndex(-1);
+              }}
+              onKeyDown={(e) => {
+                if (!showSuggestions || suggestions.length === 0) return;
 
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setActiveIndex((prev) =>
+                    prev < suggestions.length - 1 ? prev + 1 : prev
+                  );
+                }
 
+                if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
+                }
 
-                  placeholder="Search for Products, Brands and More"
-                  onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              setShowSuggestions(false);
-                              dispatch(fetchProducts({ search: searchTerm }));
-                              navigate("/");
-                            }
-                          }}
+                if (e.key === "Enter" && activeIndex >= 0) {
+                  e.preventDefault();
+                  const item = suggestions[activeIndex];
 
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon sx={{ color: "#878787" }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      background: "#f5f5f6",
-                      borderRadius: "4px",
-                    },
-                  }}
+                  setSearchTerm(item.name);
+                  setShowSuggestions(false);
+
+                  if (item.type === "category") {
+                    navigate(`/category/${item.name}`);
+                  } else {
+                    navigate(`/product/${item._id}`);
+                  }
+                }
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: "#878787" }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  background: "#f5f5f6",
+                  borderRadius: "4px",
+                },
+              }}
             />
+
             {showSuggestions && suggestions.length > 0 && (
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          top: "100%",
-                          left: 0,
-                          right: 0,
-                          background: "#fff",
-                          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                          zIndex: 1300,
-                          borderRadius: 1,
-                        }}
-                      >
-                        {suggestions.map((item) => (
-                          <Box
-                            key={item._id}
-                            sx={{
-                              px: 2,
-                              py: 1,
-                              cursor: "pointer",
-                              "&:hover": { background: "#f5f5f5" },
-                            }}
-                            onMouseDown={() => {
-  setSearchTerm(item.name);
-  setShowSuggestions(false);
-  navigate(`/product/${item._id}`);
-}}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  right: 0,
+                  background: "#fff",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  zIndex: 1300,
+                  borderRadius: 1,
+                  maxHeight: 350,
+                  overflowY: "auto",
+                }}
+              >
+                {suggestions.map((item, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      px: 2,
+                      py: 1,
+                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      background:
+                        activeIndex === index ? "#f0f7ff" : "transparent",
+                      "&:hover": { background: "#f5f5f5" },
+                    }}
+                    onMouseDown={() => {
+                      setSearchTerm(item.name);
+                      setShowSuggestions(false);
+
+                      if (item.type === "category") {
+                        navigate(`/category/${item.name}`);
+                      } else {
+                        navigate(`/product/${item._id}`);
+                      }
+                    }}
+                  >
+                    <span>{item.name}</span>
+                    <span style={{ fontSize: 12, color: "#888" }}>
+                      {item.type === "category" ? "Category" : "Product"}
+                    </span>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
 
 
-                          >
-                            {item.name}
-                          </Box>
-                        ))}
-                      </Box>
-                    )}
 
-
-        </Box>
-
-        {/* LOGIN / USER */}
+        {/* login*/}
         <Box
           onClick={user ? handleMenuOpen : () => navigate("/login")}
           sx={{

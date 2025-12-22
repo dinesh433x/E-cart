@@ -148,8 +148,8 @@ const ProductDetails = () => {
             </Box>
 
             {/* RIGHT DETAILS */}
-            <Box sx={{ flex: 1, bgcolor: "#fff", p: 3 }}>
-              <Typography variant="h6">{product.name}</Typography>
+            <Box sx={{ flex: 1, bgcolor: "#fff", p: 1.4, alignItems: "flex-start"}}>
+              <Typography variant="h6" >{product.name}</Typography>
 
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
                 <Chip
