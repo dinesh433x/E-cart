@@ -2,10 +2,10 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import connectDB from "./config/db.js";
-import bannerRoutes from "./routes/banner.js";
 import authRoutes from "./routes/auth.js";
 import productRoutes from "./routes/product.js";
 import Banner from "./routes/banner.js";
+import cartRoutes from "./routes/cart.js";
 
 dotenv.config();
 connectDB();
@@ -22,6 +22,7 @@ app.get("/", (req, res) => res.send("API is running..."));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 app.use("/api/banners", Banner);
 
 
