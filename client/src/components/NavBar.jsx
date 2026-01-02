@@ -20,10 +20,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Badge from "@mui/material/Badge";
+
 
 
 export default function Navbar() {
   const navigate = useNavigate();
+ const { items } = useSelector((state) => state.cart);
 
 
   const [user, setUser] = useState(null);
@@ -365,19 +369,26 @@ export default function Navbar() {
 
         {/* CART */}
         <Box
-          onClick={() => navigate("/cart")}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0.5,
-            cursor: "pointer",
-          }}
-        >
-          <ShoppingCartOutlinedIcon sx={{ fontSize: 26 }} />
-          <Typography sx={{ fontSize: "16px", fontWeight: 500 }}>
-            Cart
-          </Typography>
-        </Box>
+            onClick={() => navigate("/cart")}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+              cursor: "pointer",
+            }}
+          >
+            <Badge
+              badgeContent={items?.length || 0}
+              color="primary"
+              overlap="circular"
+            >
+              <ShoppingCartOutlinedIcon sx={{ fontSize: 26 }} />
+            </Badge>
+
+            <Typography sx={{ fontSize: "16px", fontWeight: 500 }}>
+              Cart
+            </Typography>
+          </Box>
 
         {/* CATEGORIES */}
         <Box

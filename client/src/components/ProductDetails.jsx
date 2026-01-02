@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import {
@@ -10,11 +11,8 @@ import {
   Button,
   IconButton,
   Chip,
-  Link,
   TextField,
   InputAdornment,
-  Tooltip,
-  Checkbox,
   Grid,
   List,
   ListItem,
@@ -31,11 +29,10 @@ import {
   FlashOn,
   Star,
   LocalOffer,
-  NavigateNext,
   LocationOnOutlined,
-  HelpOutline,
-  Share,
 } from "@mui/icons-material";
+
+import { addToCart } from "../redux/cartSlice"; 
 
 const theme = createTheme({
   palette: {
@@ -48,11 +45,12 @@ const theme = createTheme({
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
- 
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -61,9 +59,9 @@ const ProductDetails = () => {
           `http://localhost:5000/api/products/${id}`
         );
         setProduct(data);
-        } catch (err) {
-              console.error(err);
-              setError("Product not found");
+      } catch (err) {
+        console.error(err);
+        setError("Product not found");
       } finally {
         setLoading(false);
       }
@@ -71,6 +69,23 @@ const ProductDetails = () => {
 
     fetchProduct();
   }, [id]);
+
+  // ✅ ADD TO CART HANDLER
+  const addToCartHandler = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (!userInfo) {
+      navigate("/login");
+      return;
+    }
+
+    dispatch(
+      addToCart({
+        productId: product._id,
+        quantity: 1,
+      })
+    );
+  };
 
   if (loading) {
     return <Typography sx={{ p: 5 }}>Loading product...</Typography>;
@@ -97,9 +112,7 @@ const ProductDetails = () => {
       <CssBaseline />
 
       <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
-        <Container maxWidth="xl" sx={{  pt:8 }}>
-          
-
+        <Container maxWidth="xl" sx={{ pt: 8 }}>
           <Box sx={{ display: "flex", gap: 3 }}>
             {/* LEFT IMAGE */}
             <Box sx={{ width: 450, position: "sticky", top: 16 }}>
@@ -127,14 +140,17 @@ const ProductDetails = () => {
                 </Box>
 
                 <Stack direction="row" spacing={2} mt={2}>
+                  {/* ✅ ADD TO CART */}
                   <Button
                     fullWidth
                     variant="contained"
                     startIcon={<ShoppingCart />}
                     sx={{ bgcolor: "#ff9f00", py: 1.5 }}
+                    onClick={addToCartHandler}
                   >
                     ADD TO CART
                   </Button>
+
                   <Button
                     fullWidth
                     variant="contained"
@@ -148,8 +164,8 @@ const ProductDetails = () => {
             </Box>
 
             {/* RIGHT DETAILS */}
-            <Box sx={{ flex: 1, bgcolor: "#fff", p: 1.4, alignItems: "flex-start"}}>
-              <Typography variant="h6" >{product.name}</Typography>
+            <Box sx={{ flex: 1, bgcolor: "#fff", p: 1.4 }}>
+              <Typography variant="h6">{product.name}</Typography>
 
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
                 <Chip

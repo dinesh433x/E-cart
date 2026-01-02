@@ -10,6 +10,7 @@ import ProductDetails from './components/ProductDetails';
 import { useDispatch } from "react-redux";
 import { fetchCategories } from "./redux/productSlice";
 import { useEffect } from "react";
+import { fetchCart } from "./redux/cartSlice";
 
 
 
@@ -18,6 +19,10 @@ export default function App() {
 
   useEffect(() => {
     dispatch(fetchCategories());
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  if (userInfo) {
+    dispatch(fetchCart());
+  }
   }, [dispatch]);
 
   return (

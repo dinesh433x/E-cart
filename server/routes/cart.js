@@ -53,4 +53,32 @@ router.delete("/:productId", protect, async (req, res) => {
   res.json(user.cart);
 });
 
+
+//update
+router.put("/:productId", protect, async (req, res) => {
+  const { quantity } = req.body;
+
+  const user = await User.findById(req.user._id);
+
+  const cartItem = user.cart.find(
+    (item) => item.product.toString() === req.params.productId
+  );
+
+  if (!cartItem) {
+    return res.status(404).json({ message: "Item not found in cart" });
+  }
+
+  cartItem.quantity = quantity;
+
+  // remove if quantity becomes 0
+  if (cartItem.quantity <= 0) {
+    user.cart = user.cart.filter(
+      (item) => item.product.toString() !== req.params.productId
+    );
+  }
+
+  await user.save();
+  res.json(user.cart);
+});
+
 export default router;

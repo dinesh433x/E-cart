@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// get token
+//GET
 const getToken = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   return userInfo?.token;
 };
 
-// get cart, GET
+//FETCH
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async (_, thunkAPI) => {
@@ -16,7 +16,30 @@ export const fetchCart = createAsyncThunk(
           Authorization: `Bearer ${getToken()}`,
         },
       });
-      return await res.json();
+
+      const cartItems = await res.json();
+
+      // hydrate cart with product details
+      const detailedItems = await Promise.all(
+        cartItems.map(async (item) => {
+          const productRes = await fetch(
+            `http://localhost:5000/api/products/${item.product}`
+          );
+          const product = await productRes.json();
+
+          return {
+            product: item.product,
+            quantity: item.quantity,
+            price: product.price,
+            name: product.name,
+            image: product.image,
+            description: product.description,
+            seller: product.brand || "Seller",
+          };
+        })
+      );
+
+      return detailedItems;
     } catch (err) {
       console.error(err);
       return thunkAPI.rejectWithValue("Failed to fetch cart");
@@ -24,12 +47,12 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
-// add cart , POST
+//ADD
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ productId, quantity }, thunkAPI) => {
     try {
-      const res = await fetch("http://localhost:5000/api/cart", {
+      await fetch("http://localhost:5000/api/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,7 +60,9 @@ export const addToCart = createAsyncThunk(
         },
         body: JSON.stringify({ productId, quantity }),
       });
-      return await res.json();
+
+      // 🔥 ALWAYS re-fetch full cart
+      thunkAPI.dispatch(fetchCart());
     } catch (err) {
       console.error(err);
       return thunkAPI.rejectWithValue("Failed to add to cart");
@@ -45,21 +70,43 @@ export const addToCart = createAsyncThunk(
   }
 );
 
-//remove cart, DELETE
+//UPDATE
+export const updateCartQuantity = createAsyncThunk(
+  "cart/updateQuantity",
+  async ({ productId, quantity }, thunkAPI) => {
+    try {
+      await fetch(`http://localhost:5000/api/cart/${productId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
+        },
+        body: JSON.stringify({ quantity }),
+      });
+
+      // 🔥 re-fetch cart
+      thunkAPI.dispatch(fetchCart());
+    } catch (err) {
+      console.error(err);
+      return thunkAPI.rejectWithValue("Failed to update quantity");
+    }
+  }
+);
+
+//REMOVE
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async (productId, thunkAPI) => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/cart/${productId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
-        }
-      );
-      return await res.json();
+      await fetch(`http://localhost:5000/api/cart/${productId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+
+      // 🔥 re-fetch cart
+      thunkAPI.dispatch(fetchCart());
     } catch (err) {
       console.error(err);
       return thunkAPI.rejectWithValue("Failed to remove item");
@@ -67,6 +114,7 @@ export const removeFromCart = createAsyncThunk(
   }
 );
 
+//cart slice
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
@@ -77,7 +125,7 @@ const cartSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // fetch
+      // fetch cart
       .addCase(fetchCart.pending, (state) => {
         state.loading = true;
       })
@@ -88,16 +136,6 @@ const cartSlice = createSlice({
       .addCase(fetchCart.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-
-      // add
-      .addCase(addToCart.fulfilled, (state, action) => {
-        state.items = action.payload;
-      })
-
-      // remove
-      .addCase(removeFromCart.fulfilled, (state, action) => {
-        state.items = action.payload;
       });
   },
 });
