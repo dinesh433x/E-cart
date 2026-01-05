@@ -61,7 +61,7 @@ export const addToCart = createAsyncThunk(
         body: JSON.stringify({ productId, quantity }),
       });
 
-      // 🔥 ALWAYS re-fetch full cart
+      //   re-fetch full cart
       thunkAPI.dispatch(fetchCart());
     } catch (err) {
       console.error(err);
@@ -84,7 +84,7 @@ export const updateCartQuantity = createAsyncThunk(
         body: JSON.stringify({ quantity }),
       });
 
-      // 🔥 re-fetch cart
+      //  re-fetch cart
       thunkAPI.dispatch(fetchCart());
     } catch (err) {
       console.error(err);
@@ -105,7 +105,7 @@ export const removeFromCart = createAsyncThunk(
         },
       });
 
-      // 🔥 re-fetch cart
+      //  re-fetch cart
       thunkAPI.dispatch(fetchCart());
     } catch (err) {
       console.error(err);

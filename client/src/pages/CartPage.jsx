@@ -19,8 +19,6 @@ import {
 export default function CartPage() {
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.cart);
-
-  // prevents black screen
   const [updatingId, setUpdatingId] = useState(null);
 
   const subtotal = items.reduce(
@@ -32,15 +30,11 @@ export default function CartPage() {
   const totalAmount = subtotal + platformFee;
 
   return (
-    <Box sx={{ pt: "90px", px: { xs: 2, md: 4 }, pb: 4, bgcolor: "#f1f3f6" }}>
-      {items.length === 0 ? (
-        <Box sx={{ textAlign: "center", py: 8 }}>
-          <Typography variant="h6">Your cart is empty</Typography>
-        </Box>
-      ) : (
-        <Grid container spacing={2}>
-          {/* LEFT - CART ITEMS */}
-          <Grid item xs={12} md={8}>
+    <Box sx={{ pt: "90px", pb: 4, bgcolor: "#f1f3f6", width: "100%" }}>
+      <Grid container spacing={2} sx={{ px: 2 }}>
+        {/* LEFT SIDE */}
+        <Grid item xs={12} md={9}>
+          <Box sx={{  mx: "auto"}}>
             {items.map((item) => {
               const deliveryDate = new Date();
               deliveryDate.setDate(deliveryDate.getDate() + 5);
@@ -56,8 +50,7 @@ export default function CartPage() {
                 <Card key={item.product} sx={{ mb: 2 }}>
                   <CardContent sx={{ p: 3 }}>
                     <Grid container spacing={3}>
-                      {/* IMAGE */}
-                      <Grid item xs={12} sm={3}>
+                      <Grid item md={3}>
                         <CardMedia
                           component="img"
                           image={item.image}
@@ -66,183 +59,115 @@ export default function CartPage() {
                         />
                       </Grid>
 
-                      {/* DETAILS */}
-                      <Grid item xs={12} sm={6}>
-                        <Typography fontSize={16} fontWeight={500}>
+                      <Grid item md={6}>
+                        <Typography fontWeight={500}>
                           {item.name}
                         </Typography>
 
-                        <Typography
-                          fontSize={14}
-                          color="text.secondary"
-                          mb={0.5}
-                        >
+                        <Typography fontSize={14} color="text.secondary">
                           {item.description}
                         </Typography>
 
-                        <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                          <Typography fontSize={14} color="text.secondary">
-                            Seller: {item.seller}
+                        <Typography fontSize={14}>
+                          Seller: {item.seller} <Chip size="small" label="Assured" />
+                        </Typography>
+
+                        <Typography mt={1}>
+                          Price: <strong>₹{item.price}</strong>
+                        </Typography>
+
+                        {item.quantity > 1 && (
+                          <Typography fontWeight={600}>
+                            Total: ₹{item.price * item.quantity}
                           </Typography>
-                          <Chip
-                            label="Assured"
-                            size="small"
-                            sx={{ ml: 1, height: 18, fontSize: 11 }}
-                          />
-                        </Box>
+                        )}
 
-                        {/* PRICE */}
-                          <Box sx={{ mb: 2 }}>
-                            <Typography
-                              sx={{
-                                fontSize: "12px",
-                                color: "text.secondary",
-                              }}
-                            >
-                              Price:
-                              <strong style={{ marginLeft: 6 }}>
-                                ₹{item.price}
-                              </strong>
-                            </Typography>
-
-                            {item.quantity > 1 && (
-                              <Typography
-                                sx={{
-                                  fontSize: "18px",
-                                  fontWeight: 600,
-                                  mt: 0.5,
-                                }}
-                              >
-                                Total Price:
-                                <strong style={{ marginLeft: 6 }}>
-                                  ₹{item.price * item.quantity}
-                                </strong>
-                              </Typography>
-                            )}
-                          </Box>
-
-
-                        {/* QUANTITY CONTROLS */}
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              border: "1px solid #e0e0e0",
-                              borderRadius: 50,
-                              opacity: isUpdating ? 0.6 : 1,
+                        <Box mt={2} display="flex" gap={2}>
+                          <Button
+                            disabled={item.quantity <= 1 || isUpdating}
+                            onClick={() => {
+                              setUpdatingId(item.product);
+                              dispatch(
+                                updateCartQuantity({
+                                  productId: item.product,
+                                  quantity: item.quantity - 1,
+                                })
+                              ).finally(() => setUpdatingId(null));
                             }}
                           >
-                            <Button
-                              size="small"
-                              disabled={item.quantity <= 1 || isUpdating}
-                              onClick={() => {
-                                setUpdatingId(item.product);
-                                dispatch(
-                                  updateCartQuantity({
-                                    productId: item.product,
-                                    quantity: item.quantity - 1,
-                                  })
-                                ).finally(() => setUpdatingId(null));
-                              }}
-                            >
-                              −
-                            </Button>
+                            
+                          </Button>
 
-                            <Typography mx={2}>{item.quantity}</Typography>
-
-                            <Button
-                              size="small"
-                              disabled={isUpdating}
-                              onClick={() => {
-                                setUpdatingId(item.product);
-                                dispatch(
-                                  updateCartQuantity({
-                                    productId: item.product,
-                                    quantity: item.quantity + 1,
-                                  })
-                                ).finally(() => setUpdatingId(null));
-                              }}
-                            >
-                              +
-                            </Button>
-                          </Box>
+                          <Typography>{item.quantity}</Typography>
 
                           <Button
-                            variant="text"
                             disabled={isUpdating}
                             onClick={() => {
                               setUpdatingId(item.product);
-                              dispatch(removeFromCart(item.product)).finally(
-                                () => setUpdatingId(null)
-                              );
+                              dispatch(
+                                updateCartQuantity({
+                                  productId: item.product,
+                                  quantity: item.quantity + 1,
+                                })
+                              ).finally(() => setUpdatingId(null));
                             }}
                           >
-                            {isUpdating ? "Updating..." : "REMOVE"}
+                            +
+                          </Button>
+
+                          <Button
+                            onClick={() => dispatch(removeFromCart(item.product))}
+                          >
+                            REMOVE
                           </Button>
                         </Box>
                       </Grid>
 
-                      {/* DELIVERY */}
-                      <Grid item xs={12} sm={3}>
-                        <Typography
-                          fontSize={14}
-                          fontWeight={500}
-                          textAlign={{ xs: "left", sm: "right" }}
-                        >
-                          Delivery by {formattedDate}
-                        </Typography>
+                      <Grid item md={3} textAlign="right">
+                        Delivery by {formattedDate}
                       </Grid>
                     </Grid>
                   </CardContent>
                 </Card>
               );
             })}
-          </Grid>
-
-          {/* RIGHT - PRICE SUMMARY */}
-          <Grid item xs={12} md={4}>
-            <Card sx={{ position: "sticky", top: 100 }}>
-              <CardContent sx={{ p: 3 }}>
-                <Typography fontWeight={600} mb={2}>
-                  Price details
-                </Typography>
-
-                <Box display="flex" justifyContent="space-between" mb={1}>
-                  <Typography>Subtotal</Typography>
-                  <Typography>₹{subtotal}</Typography>
-                </Box>
-
-                <Box display="flex" justifyContent="space-between" mb={2}>
-                  <Typography>Platform Fee</Typography>
-                  <Typography>₹{platformFee}</Typography>
-                </Box>
-
-                <Divider sx={{ my: 2 }} />
-
-                <Box display="flex" justifyContent="space-between" mb={3}>
-                  <Typography fontWeight={600}>Total Amount</Typography>
-                  <Typography fontWeight={600}>
-                    ₹{totalAmount}
-                  </Typography>
-                </Box>
-
-                <Button
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  sx={{
-                    bgcolor: "#fb641b",
-                    "&:hover": { bgcolor: "#e85d1a" },
-                  }}
-                >
-                  PLACE ORDER
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
+          </Box>
         </Grid>
-      )}
+
+        {/* RIGHT SIDE  */}
+        <Grid item xs={12} md={3}>
+          <Card sx={{ position: "sticky", top: 100, width: "100%",}}>
+            <CardContent>
+              <Typography fontWeight={600}>Price details</Typography>
+
+              <Box display="flex" justifyContent="space-between" mt={2}>
+                <Typography>Subtotal</Typography>
+                <Typography>₹{subtotal}</Typography>
+              </Box>
+
+              <Box display="flex" justifyContent="space-between">
+                <Typography>Platform Fee</Typography>
+                <Typography>₹{platformFee}</Typography>
+              </Box>
+
+              <Divider sx={{ my: 2 }} />
+
+              <Box display="flex" justifyContent="space-between">
+                <Typography fontWeight={600}>Total</Typography>
+                <Typography fontWeight={600}>₹{totalAmount}</Typography>
+              </Box>
+
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ mt: 2, bgcolor: "#fb641b" }}
+              >
+                PLACE ORDER
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     </Box>
   );
 }
