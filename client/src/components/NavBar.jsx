@@ -236,9 +236,10 @@ export default function Navbar() {
                 if (e.key === "Enter" && activeIndex >= 0) {
                   e.preventDefault();
                   const item = suggestions[activeIndex];
-
-                  setSearchTerm(item.name);
+                  navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+                  
                   setShowSuggestions(false);
+                  
 
                   if (item.type === "category") {
                     navigate(`/category/${item.name}`);

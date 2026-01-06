@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { fetchCategories } from "./redux/productSlice";
 import { useEffect } from "react";
 import { fetchCart } from "./redux/cartSlice";
+import SearchResultsPage from "./pages/SearchResultsPage";
 
 
 
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/search" element={<SearchResultsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/category/:categoryName" element={<CategoryProductsPage />} />
