@@ -45,7 +45,7 @@ export default function CartPage() {
 
         <Button
           variant="contained"
-          sx={{ bgcolor: "#fb641b" }}
+          sx={{ bgcolor: "#1d4e9cff" }}
           onClick={() => navigate("/")}
         >
           CONTINUE SHOPPING
