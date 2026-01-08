@@ -20,3 +20,22 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+
+
+node_modules/
+client/node_modules/
+server/node_modules/
+
+dist/
+build/
+
+.env
+.env.local
+.env.development
+.env.production
+
+npm-debug.log*
+yarn-error.log*
+
+/package-lock.json
+
