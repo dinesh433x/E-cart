@@ -23,29 +23,21 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Badge from "@mui/material/Badge";
 
-
-
 export default function Navbar() {
   const navigate = useNavigate();
- const { items } = useSelector((state) => state.cart);
-
+  const { items } = useSelector((state) => state.cart);
 
   const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [categories, setCategories] = useState([]);
-  
 
   const [searchTerm, setSearchTerm] = useState("");
-  
 
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const [activeIndex, setActiveIndex] = useState(-1);
-
-
-  
 
   const open = Boolean(anchorEl);
 
@@ -59,14 +51,14 @@ export default function Navbar() {
         setUser(null);
       }
 
-      
-          const fetchCategories = async () => {
-            const res = await fetch("http://localhost:5000/api/products/categories");
-            const data = await res.json();
-            setCategories(data);
-          };
-          fetchCategories();
-        
+      const fetchCategories = async () => {
+        const res = await fetch(
+          "http://localhost:5000/api/products/categories"
+        );
+        const data = await res.json();
+        setCategories(data);
+      };
+      fetchCategories();
     };
 
     loadUser();
@@ -96,8 +88,12 @@ export default function Navbar() {
   return (
     <AppBar
       position="fixed"
-      color="default" 
-      sx={{ background: "#fff",color: "#212121", boxShadow: "0 1px 2px rgba(0,0,0,0.1)" }}
+      color="default"
+      sx={{
+        background: "#fff",
+        color: "#212121",
+        boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+      }}
     >
       <Toolbar
         sx={{
@@ -105,215 +101,221 @@ export default function Navbar() {
           alignItems: "center",
           justifyContent: "space-between",
           maxWidth: 1200,
-          
+
           mx: "auto",
           width: "100%",
         }}
       >
         {/* LOGO */}
         <Box
-        onClick={() => navigate("/")}
-        sx={{
-          cursor: "pointer",
-          display: "flex",
-          flexDirection: "column",   
-          alignItems: "flex-start", 
-        }}
-      >
-        {/* Main Logo */}
-        <Typography
+          onClick={() => navigate("/")}
           sx={{
-            fontWeight: "bold",
-            fontStyle: "italic",
-            fontSize: "1.6rem",
-            color: "#1d4e9cff",
-            lineHeight: 1.1,
-          }}
-        >
-          E-cart
-        </Typography>
-
-        {/*  Tagline BELOW the logo */}
-        <Box
-          sx={{
+            cursor: "pointer",
             display: "flex",
-            alignItems: "center",
-            gap: 0.3,
-            mt: 0.2, 
+            flexDirection: "column",
+            alignItems: "flex-start",
           }}
         >
-          <Typography sx={{ fontSize: "12px", color: "#878787" }}>
-            Anything
+          {/* Main Logo */}
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              fontStyle: "italic",
+              fontSize: "1.6rem",
+              color: "#1d4e9cff",
+              lineHeight: 1.1,
+            }}
+          >
+            E-cart
           </Typography>
 
-          <Typography sx={{ fontSize: "12px", color: "#f5c500", fontWeight: 600 }}>
-            Anytime
-          </Typography>
+          {/*  Tagline BELOW the logo */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.3,
+              mt: 0.2,
+            }}
+          >
+            <Typography sx={{ fontSize: "12px", color: "#878787" }}>
+              Anything
+            </Typography>
+
+            <Typography
+              sx={{ fontSize: "12px", color: "#f5c500", fontWeight: 600 }}
+            >
+              Anytime
+            </Typography>
+          </Box>
         </Box>
-      </Box>
 
+        {/*search box*/}
+        <Box sx={{ flexGrow: 1, maxWidth: 550, position: "relative" }}>
+          <TextField
+            size="small"
+            fullWidth
+            value={searchTerm}
+            placeholder="Search for Products, Brands and More"
+            onBlur={() => {
+              setTimeout(() => setShowSuggestions(false), 200);
+            }}
+            onChange={async (e) => {
+              const value = e.target.value;
+              setSearchTerm(value);
 
-       {/*search box*/}
-          <Box sx={{ flexGrow: 1, maxWidth: 550, position: "relative" }}>
-            <TextField
-              size="small"
-              fullWidth
-              value={searchTerm}
-              placeholder="Search for Products, Brands and More"
-              onBlur={() => {
-                setTimeout(() => setShowSuggestions(false), 200);
-              }}
-              onChange={async (e) => {
-                const value = e.target.value;
-                setSearchTerm(value);
+              if (value.length < 2) {
+                setSuggestions([]);
+                setShowSuggestions(false);
+                setActiveIndex(-1);
+                return;
+              }
 
-                if (value.length < 2) {
-                  setSuggestions([]);
-                  setShowSuggestions(false);
-                  setActiveIndex(-1);
-                  return;
-                }
+              // partial category search
+              const matchedCategory = categories.find((cat) =>
+                cat.toLowerCase().includes(value.toLowerCase())
+              );
 
-                // partial category search
-                const matchedCategory = categories.find((cat) =>
-                  cat.toLowerCase().includes(value.toLowerCase())
-                );
+              if (matchedCategory) {
+                const categoryItem = {
+                  type: "category",
+                  name: matchedCategory,
+                };
 
-                if (matchedCategory) {
-                  const categoryItem = {
-                    type: "category",
-                    name: matchedCategory,
-                  };
-
-                  const res = await fetch(
-                    `http://localhost:5000/api/products?category=${matchedCategory}`
-                  );
-                  const categoryProducts = await res.json();
-
-                  const productItems = categoryProducts.map((p) => ({
-                    type: "product",
-                    _id: p._id,
-                    name: p.name,
-                  }));
-
-                  setSuggestions([categoryItem, ...productItems]);
-                  setShowSuggestions(true);
-                  setActiveIndex(-1);
-                  return;
-                }
-
-                // prod search
                 const res = await fetch(
-                  `http://localhost:5000/api/products/suggest?search=${value}`
+                  `http://localhost:5000/api/products?category=${matchedCategory}`
                 );
-                const products = await res.json();
+                const categoryProducts = await res.json();
 
-                setSuggestions(
-                  products.map((p) => ({
-                    type: "product",
-                    _id: p._id,
-                    name: p.name,
-                  }))
-                );
+                const productItems = categoryProducts.map((p) => ({
+                  type: "product",
+                  _id: p._id,
+                  name: p.name,
+                }));
+
+                setSuggestions([categoryItem, ...productItems]);
                 setShowSuggestions(true);
                 setActiveIndex(-1);
-              }}
-              onKeyDown={(e) => {
-                if (!showSuggestions || suggestions.length === 0) return;
+                return;
+              }
 
-                if (e.key === "ArrowDown") {
-                  e.preventDefault();
-                  setActiveIndex((prev) =>
-                    prev < suggestions.length - 1 ? prev + 1 : prev
-                  );
+              // prod search
+              const res = await fetch(
+                `http://localhost:5000/api/products/suggest?search=${value}`
+              );
+              const products = await res.json();
+
+              setSuggestions(
+                products.map((p) => ({
+                  type: "product",
+                  _id: p._id,
+                  name: p.name,
+                }))
+              );
+              setShowSuggestions(true);
+              setActiveIndex(-1);
+            }}
+            onKeyDown={(e) => {
+              if (!showSuggestions || suggestions.length === 0) return;
+
+              if (e.key === "ArrowDown") {
+                e.preventDefault();
+                setActiveIndex((prev) =>
+                  prev < suggestions.length - 1 ? prev + 1 : prev
+                );
+              }
+
+              if (e.key === "ArrowUp") {
+                e.preventDefault();
+                setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
+              }
+
+              if (e.key === "Enter" && activeIndex >= 0) {
+                e.preventDefault();
+                const item = suggestions[activeIndex];
+
+                setSearchTerm(item.name);
+                setShowSuggestions(false);
+
+                if (item.type === "category") {
+                  navigate(`/category/${item.name}`);
+                } else {
+                  navigate(`/product/${item._id}`);
                 }
+              }
+              
+              //forr enter key 
+              if (e.key === "Enter" && activeIndex === -1) {
+                e.preventDefault();
+                setShowSuggestions(false);
+                navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+              }
+            }}
+            
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: "#878787" }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                background: "#f5f5f6",
+                borderRadius: "4px",
+              },
+            }}
+          />
 
-                if (e.key === "ArrowUp") {
-                  e.preventDefault();
-                  setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
-                }
-
-                if (e.key === "Enter" && activeIndex >= 0) {
-                  e.preventDefault();
-                  const item = suggestions[activeIndex];
-                  navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
-                  
-                  setShowSuggestions(false);
-                  
-
-                  if (item.type === "category") {
-                    navigate(`/category/${item.name}`);
-                  } else {
-                    navigate(`/product/${item._id}`);
-                  }
-                }
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ color: "#878787" }} />
-                  </InputAdornment>
-                ),
-              }}
+          {showSuggestions && suggestions.length > 0 && (
+            <Box
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  background: "#f5f5f6",
-                  borderRadius: "4px",
-                },
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                background: "#fff",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                zIndex: 1300,
+                borderRadius: 1,
+                maxHeight: 350,
+                overflowY: "auto",
               }}
-            />
+            >
+              {suggestions.map((item, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    px: 2,
+                    py: 1,
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    background:
+                      activeIndex === index ? "#f0f7ff" : "transparent",
+                    "&:hover": { background: "#f5f5f5" },
+                  }}
+                  onMouseDown={() => {
+                    setSearchTerm(item.name);
+                    setShowSuggestions(false);
 
-            {showSuggestions && suggestions.length > 0 && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "100%",
-                  left: 0,
-                  right: 0,
-                  background: "#fff",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                  zIndex: 1300,
-                  borderRadius: 1,
-                  maxHeight: 350,
-                  overflowY: "auto",
-                }}
-              >
-                {suggestions.map((item, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      px: 2,
-                      py: 1,
-                      cursor: "pointer",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      background:
-                        activeIndex === index ? "#f0f7ff" : "transparent",
-                      "&:hover": { background: "#f5f5f5" },
-                    }}
-                    onMouseDown={() => {
-                      setSearchTerm(item.name);
-                      setShowSuggestions(false);
-
-                      if (item.type === "category") {
-                        navigate(`/category/${item.name}`);
-                      } else {
-                        navigate(`/product/${item._id}`);
-                      }
-                    }}
-                  >
-                    <span>{item.name}</span>
-                    <span style={{ fontSize: 12, color: "#888" }}>
-                      {item.type === "category" ? "Category" : "Product"}
-                    </span>
-                  </Box>
-                ))}
-              </Box>
-            )}
-          </Box>
-
-
+                    if (item.type === "category") {
+                      navigate(`/category/${item.name}`);
+                    } else {
+                      navigate(`/product/${item._id}`);
+                    }
+                  }}
+                >
+                  <span>{item.name}</span>
+                  <span style={{ fontSize: 12, color: "#888" }}>
+                    {item.type === "category" ? "Category" : "Product"}
+                  </span>
+                </Box>
+              ))}
+            </Box>
+          )}
+        </Box>
 
         {/* login*/}
         <Box
@@ -370,26 +372,26 @@ export default function Navbar() {
 
         {/* CART */}
         <Box
-            onClick={() => navigate("/cart")}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 0.5,
-              cursor: "pointer",
-            }}
+          onClick={() => navigate("/cart")}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+            cursor: "pointer",
+          }}
+        >
+          <Badge
+            badgeContent={items?.length || 0}
+            color="primary"
+            overlap="circular"
           >
-            <Badge
-              badgeContent={items?.length || 0}
-              color="primary"
-              overlap="circular"
-            >
-              <ShoppingCartOutlinedIcon sx={{ fontSize: 26 }} />
-            </Badge>
+            <ShoppingCartOutlinedIcon sx={{ fontSize: 26 }} />
+          </Badge>
 
-            <Typography sx={{ fontSize: "16px", fontWeight: 500 }}>
-              Cart
-            </Typography>
-          </Box>
+          <Typography sx={{ fontSize: "16px", fontWeight: 500 }}>
+            Cart
+          </Typography>
+        </Box>
 
         {/* CATEGORIES */}
         <Box

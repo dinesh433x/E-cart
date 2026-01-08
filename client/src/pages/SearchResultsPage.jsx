@@ -36,8 +36,6 @@ export default function SearchResultsPage() {
         <Typography>No products found</Typography>
       )}
 
-      
-
       {/* LIST LAYOUT */}
       {items.map((product, index) => (
         <Box key={product._id}>
