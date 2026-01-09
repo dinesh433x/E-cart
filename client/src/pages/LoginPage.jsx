@@ -15,13 +15,14 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { fetchCart } from "../redux/cartSlice";
+
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-
-
-  
-
+  const navigate = useNavigate(); 
+  const dispatch = useDispatch(); 
+   
   const [isSignup, setIsSignup] = useState(false);
   const [name, setName] = useState(""); 
   const [email, setEmail] = useState("");
@@ -66,7 +67,7 @@ export default function LoginPage() {
        window.dispatchEvent(new Event("authChanged"));
        console.log(isSignup ? "Signup Success:" : "Login Success:", data);
 
-      //Redirect to home
+      dispatch(fetchCart());
       navigate("/");
     } catch (err) {
       setError(err.message || "Something went wrong");

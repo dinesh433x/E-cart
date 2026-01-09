@@ -21,7 +21,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { clearCart } from "../redux/cartSlice";
+import { useDispatch } from "react-redux";
 import Badge from "@mui/material/Badge";
+
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -40,6 +43,8 @@ export default function Navbar() {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const open = Boolean(anchorEl);
+
+  const dispatch = useDispatch();
 
   // Load user from localStorage
   useEffect(() => {
@@ -77,11 +82,10 @@ export default function Navbar() {
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
     setUser(null);
+    dispatch(clearCart());
 
-    // Notify navbar to update
+    setUser(null);
     window.dispatchEvent(new Event("authChanged"));
-
-    handleMenuClose();
     navigate("/login");
   };
 
@@ -243,15 +247,29 @@ export default function Navbar() {
                   navigate(`/product/${item._id}`);
                 }
               }
-              
+
               //forr enter key 
               if (e.key === "Enter" && activeIndex === -1) {
                 e.preventDefault();
                 setShowSuggestions(false);
-                navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+
+                // 🔥 check FULL category match (case-insensitive)
+                const exactCategory = categories.find(
+                  (cat) => cat.toLowerCase() === searchTerm.toLowerCase()
+                );
+
+                if (exactCategory) {
+                  // 👉 full category search
+                  navigate(`/search?category=${encodeURIComponent(exactCategory)}`);
+                } else {
+                  // 👉 normal keyword search
+                  navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+                }
               }
-            }}
-            
+
+            }
+            }
+
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

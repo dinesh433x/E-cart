@@ -14,6 +14,7 @@ import { fetchProducts } from "../redux/productSlice";
 export default function SearchResultsPage() {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get("q");
+  const category = searchParams.get("category");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,10 +22,13 @@ export default function SearchResultsPage() {
   const { items, loading } = useSelector((state) => state.products);
 
   useEffect(() => {
-    if (keyword) {
+    if (category) {
+      dispatch(fetchProducts({ category }));
+    } else if (keyword) {
       dispatch(fetchProducts({ search: keyword }));
     }
-  }, [dispatch, keyword]);
+  }, [dispatch, keyword, category]);
+
 
   return (
     <Box sx={{ pt: "90px", px: { xs: 2, md: 4 } }}>

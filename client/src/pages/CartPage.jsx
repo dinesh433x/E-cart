@@ -15,12 +15,19 @@ import {
   updateCartQuantity,
 } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchCart } from "../redux/cartSlice";
+
 
 export default function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { items } = useSelector((state) => state.cart);
   const [updatingId, setUpdatingId] = useState(null);
+
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch]);
 
   if (!items || items.length === 0) {
     return (
@@ -54,7 +61,7 @@ export default function CartPage() {
     );
   }
 
-  
+
   const subtotal = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0

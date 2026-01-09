@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 });
 
 export default router;
-// POST 
+// POST.
 router.post("/", async (req, res) => {
   try {
     console.log("BODY:", req.body); 

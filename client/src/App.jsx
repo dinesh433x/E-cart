@@ -12,6 +12,8 @@ import { fetchCategories } from "./redux/productSlice";
 import { useEffect } from "react";
 import { fetchCart } from "./redux/cartSlice";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import { clearCart } from "./redux/cartSlice";
+
 
 
 
@@ -20,18 +22,24 @@ export default function App() {
 
   useEffect(() => {
     dispatch(fetchCategories());
+
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  if (userInfo) {
-    dispatch(fetchCart());
-  }
+
+    if (userInfo?.token) {
+      dispatch(fetchCart());
+    } else {
+
+      dispatch(clearCart());
+    }
   }, [dispatch]);
+
 
   return (
     <>
-      <Navbar /> 
-        <div style={{ paddingTop: "6px" }}>
+      <Navbar />
+      <div style={{ paddingTop: "6px" }}>
         <Routes >
-          
+
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<LoginPage />} />
@@ -39,12 +47,12 @@ export default function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/categories" element={<CategoryPage />} />
           <Route path="/category/:categoryName" element={<CategoryProductsPage />} />
-          
+
         </Routes>
-        </div>        
-        
-        <Footer />
-      
+      </div>
+
+      <Footer />
+
     </>
   );
 }
