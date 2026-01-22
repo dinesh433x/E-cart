@@ -6,16 +6,14 @@ import LoginPage from "./pages/LoginPage";
 import CartPage from "./pages/CartPage";
 import CategoryPage from "./pages/CategoriesPage";
 import CategoryProductsPage from "./pages/CategoryProductsPage";
-import ProductDetails from './components/ProductDetails';
+import ProductDetails from "./components/ProductDetails";
 import { useDispatch } from "react-redux";
 import { fetchCategories } from "./redux/productSlice";
 import { useEffect } from "react";
 import { fetchCart } from "./redux/cartSlice";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import { clearCart } from "./redux/cartSlice";
-
-
-
+import CheckoutPage from "./pages/CheckoutPage";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -28,31 +26,30 @@ export default function App() {
     if (userInfo?.token) {
       dispatch(fetchCart());
     } else {
-
       dispatch(clearCart());
     }
   }, [dispatch]);
-
 
   return (
     <>
       <Navbar />
       <div style={{ paddingTop: "6px" }}>
-        <Routes >
-
+        <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/search" element={<SearchResultsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/categories" element={<CategoryPage />} />
-          <Route path="/category/:categoryName" element={<CategoryProductsPage />} />
-
+          <Route
+            path="/category/:categoryName"
+            element={<CategoryProductsPage />}
+          />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Routes>
       </div>
 
       <Footer />
-
     </>
   );
 }

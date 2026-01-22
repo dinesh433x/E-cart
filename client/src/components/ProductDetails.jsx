@@ -32,7 +32,7 @@ import {
   LocationOnOutlined,
 } from "@mui/icons-material";
 
-import { addToCart } from "../redux/cartSlice"; 
+import { addToCart } from "../redux/cartSlice";
 
 const theme = createTheme({
   palette: {
@@ -56,7 +56,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/products/${id}`
+          `http://localhost:5000/api/products/${id}`,
         );
         setProduct(data);
       } catch (err) {
@@ -83,7 +83,7 @@ const ProductDetails = () => {
       addToCart({
         productId: product._id,
         quantity: 1,
-      })
+      }),
     );
   };
 
@@ -156,6 +156,16 @@ const ProductDetails = () => {
                     variant="contained"
                     startIcon={<FlashOn />}
                     sx={{ bgcolor: "#fb641b", py: 1.5 }}
+                    onClick={() =>
+                      navigate("/checkout", {
+                        state: {
+                          buyNowItem: {
+                            product,
+                            quantity: 1,
+                          },
+                        },
+                      })
+                    }
                   >
                     BUY NOW
                   </Button>
@@ -167,7 +177,9 @@ const ProductDetails = () => {
             <Box sx={{ flex: 1, bgcolor: "#fff", p: 1.4 }}>
               <Typography variant="h6">{product.name}</Typography>
 
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
+              <Box
+                sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}
+              >
                 <Chip
                   label="4.3"
                   icon={<Star sx={{ color: "#fff" }} />}
