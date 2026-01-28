@@ -9,15 +9,13 @@ import {
   Chip,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   removeFromCart,
   updateCartQuantity,
+  fetchCart,
 } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { fetchCart } from "../redux/cartSlice";
-
 
 export default function CartPage() {
   const dispatch = useDispatch();
@@ -61,13 +59,10 @@ export default function CartPage() {
     );
   }
 
-
   const subtotal = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
-    0
+    0,
   );
-  const platformFee = 11;
-  const totalAmount = subtotal + platformFee;
 
   return (
     <Box
@@ -78,7 +73,7 @@ export default function CartPage() {
         width: "100%",
       }}
     >
-      {/* main container flex*/}
+      {/* Main container */}
       <Box
         sx={{
           display: "flex",
@@ -88,13 +83,8 @@ export default function CartPage() {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        {/* lhs */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            minWidth: 0,
-          }}
-        >
+        {/* LEFT SIDE - Cart Items */}
+        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
           {items.map((item) => {
             const deliveryDate = new Date();
             deliveryDate.setDate(deliveryDate.getDate() + 5);
@@ -110,24 +100,19 @@ export default function CartPage() {
               <Card key={item.product} sx={{ mb: 2 }}>
                 <CardContent sx={{ p: 3 }}>
                   <Box sx={{ display: "flex", gap: 3 }}>
-                    {/* IMAGE */}
+                    {/* Image */}
                     <Box sx={{ width: 140, flexShrink: 0 }}>
                       <CardMedia
                         component="img"
                         image={item.image}
                         alt={item.name}
-                        sx={{
-                          height: 140,
-                          objectFit: "contain",
-                        }}
+                        sx={{ height: 140, objectFit: "contain" }}
                       />
                     </Box>
 
-                    {/* DETAILS */}
+                    {/* Details */}
                     <Box sx={{ flexGrow: 1 }}>
-                      <Typography fontWeight={500}>
-                        {item.name}
-                      </Typography>
+                      <Typography fontWeight={500}>{item.name}</Typography>
 
                       <Typography fontSize={14} color="text.secondary">
                         {item.description}
@@ -148,13 +133,8 @@ export default function CartPage() {
                         </Typography>
                       )}
 
-                      {/* QUANTITY CONTROLS */}
-                      <Box
-                        mt={2}
-                        display="flex"
-                        alignItems="center"
-                        gap={2}
-                      >
+                      {/* Quantity Controls */}
+                      <Box mt={2} display="flex" alignItems="center" gap={2}>
                         <Button
                           disabled={item.quantity <= 1 || isUpdating}
                           onClick={() => {
@@ -163,7 +143,7 @@ export default function CartPage() {
                               updateCartQuantity({
                                 productId: item.product,
                                 quantity: item.quantity - 1,
-                              })
+                              }),
                             ).finally(() => setUpdatingId(null));
                           }}
                         >
@@ -180,7 +160,7 @@ export default function CartPage() {
                               updateCartQuantity({
                                 productId: item.product,
                                 quantity: item.quantity + 1,
-                              })
+                              }),
                             ).finally(() => setUpdatingId(null));
                           }}
                         >
@@ -188,16 +168,14 @@ export default function CartPage() {
                         </Button>
 
                         <Button
-                          onClick={() =>
-                            dispatch(removeFromCart(item.product))
-                          }
+                          onClick={() => dispatch(removeFromCart(item.product))}
                         >
                           REMOVE
                         </Button>
                       </Box>
                     </Box>
 
-                    {/* DELIVERY */}
+                    {/* Delivery */}
                     <Box
                       sx={{
                         minWidth: 150,
@@ -214,7 +192,7 @@ export default function CartPage() {
           })}
         </Box>
 
-        {/* rhs */}
+        {/* RIGHT SIDE - Summary */}
         <Box
           sx={{
             width: { xs: "100%", md: 420 },
@@ -226,35 +204,33 @@ export default function CartPage() {
         >
           <Card>
             <CardContent>
-              <Typography fontWeight={600}>
-                Price details
-              </Typography>
+              <Typography fontWeight={600}>Details</Typography>
 
               <Box display="flex" justifyContent="space-between" mt={2}>
                 <Typography>Subtotal</Typography>
                 <Typography>₹{subtotal}</Typography>
               </Box>
 
-              <Box display="flex" justifyContent="space-between">
-                <Typography>Platform Fee</Typography>
-                <Typography>₹{platformFee}</Typography>
+              <Box display="flex" justifyContent="space-between" mt={1}>
+                <Typography>No of items</Typography>
+                <Typography>{items.length}</Typography>
               </Box>
 
               <Divider sx={{ my: 2 }} />
 
-              <Box display="flex" justifyContent="space-between">
-                <Typography fontWeight={600}>Total</Typography>
-                <Typography fontWeight={600}>
-                  ₹{totalAmount}
-                </Typography>
-              </Box>
-
               <Button
                 variant="contained"
                 fullWidth
-                sx={{ mt: 2, bgcolor: "#fb641b" }}
+                sx={{
+                  mt: 2,
+                  bgcolor: "#fb641b",
+                  py: 1.5,
+                  fontWeight: 600,
+                  fontSize: 16,
+                }}
+                onClick={() => navigate("/checkout")}
               >
-                PLACE ORDER
+                CHECKOUT
               </Button>
             </CardContent>
           </Card>

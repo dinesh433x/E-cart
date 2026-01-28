@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { addToCart } from "../redux/cartSlice";
 
 import {
   Box,
@@ -32,8 +33,6 @@ import {
   LocationOnOutlined,
 } from "@mui/icons-material";
 
-import { addToCart } from "../redux/cartSlice";
-
 const theme = createTheme({
   palette: {
     background: { default: "#f1f3f6" },
@@ -47,6 +46,11 @@ const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleBuyNow = async () => {
+    await dispatch(addToCart({ productId: product._id, quantity: 1 }));
+    navigate("/checkout");
+  };
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +74,7 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  // ✅ ADD TO CART HANDLER
+  //  ADD TO CART HANDLER
   const addToCartHandler = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -140,7 +144,7 @@ const ProductDetails = () => {
                 </Box>
 
                 <Stack direction="row" spacing={2} mt={2}>
-                  {/* ✅ ADD TO CART */}
+                  {/*  ADD TO CART */}
                   <Button
                     fullWidth
                     variant="contained"
@@ -152,20 +156,10 @@ const ProductDetails = () => {
                   </Button>
 
                   <Button
-                    fullWidth
                     variant="contained"
-                    startIcon={<FlashOn />}
-                    sx={{ bgcolor: "#fb641b", py: 1.5 }}
-                    onClick={() =>
-                      navigate("/checkout", {
-                        state: {
-                          buyNowItem: {
-                            product,
-                            quantity: 1,
-                          },
-                        },
-                      })
-                    }
+                    color="warning"
+                    fullWidth
+                    onClick={handleBuyNow}
                   >
                     BUY NOW
                   </Button>

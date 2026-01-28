@@ -2,8 +2,6 @@ import { Box, Typography, Container, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
-
 const GridContainer = styled(Box)({
   backgroundColor: "#F5F5F5",
   padding: "20px 0",
@@ -40,8 +38,7 @@ const CheckeredFloor = styled(Box)({
   left: 0,
   right: 0,
   height: "40%",
-  background:
-    "repeating-conic-gradient(#E85D00 0% 25%, #FF6B00 0% 50%)",
+  background: "repeating-conic-gradient(#E85D00 0% 25%, #FF6B00 0% 50%)",
   backgroundSize: "30px 30px",
   transform: "perspective(100px) rotateX(20deg)",
   transformOrigin: "bottom",
@@ -73,8 +70,6 @@ const ContentArea = styled(Box)({
   zIndex: 2,
 });
 
-
-
 const BannerCard = ({ brandLabel, title, price, originalPrice, image }) => (
   <CardContainer>
     <CheckeredFloor />
@@ -84,9 +79,7 @@ const BannerCard = ({ brandLabel, title, price, originalPrice, image }) => (
     </CardboardBox>
 
     <ContentArea>
-      <Typography sx={{ fontSize: 11, color: "#fff" }}>
-        {brandLabel}
-      </Typography>
+      <Typography sx={{ fontSize: 11, color: "#fff" }}>{brandLabel}</Typography>
       <Typography sx={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>
         {title}
       </Typography>
@@ -111,8 +104,6 @@ const BannerCard = ({ brandLabel, title, price, originalPrice, image }) => (
   </CardContainer>
 );
 
-
-
 const BannerGrid = () => {
   const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -120,9 +111,7 @@ const BannerGrid = () => {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:5000/api/banners"
-        );
+        const { data } = await axios.get("http://localhost:5000/api/banners");
         setDeals(data);
       } catch (err) {
         console.error("Banner fetch error", err);
