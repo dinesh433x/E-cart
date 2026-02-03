@@ -25,7 +25,6 @@ import { clearCart } from "../redux/cartSlice";
 import { useDispatch } from "react-redux";
 import Badge from "@mui/material/Badge";
 
-
 export default function Navbar() {
   const navigate = useNavigate();
   const { items } = useSelector((state) => state.cart);
@@ -58,7 +57,7 @@ export default function Navbar() {
 
       const fetchCategories = async () => {
         const res = await fetch(
-          "http://localhost:5000/api/products/categories"
+          "http://localhost:5000/api/products/categories",
         );
         const data = await res.json();
         setCategories(data);
@@ -177,7 +176,7 @@ export default function Navbar() {
 
               // partial category search
               const matchedCategory = categories.find((cat) =>
-                cat.toLowerCase().includes(value.toLowerCase())
+                cat.toLowerCase().includes(value.toLowerCase()),
               );
 
               if (matchedCategory) {
@@ -187,7 +186,7 @@ export default function Navbar() {
                 };
 
                 const res = await fetch(
-                  `http://localhost:5000/api/products?category=${matchedCategory}`
+                  `http://localhost:5000/api/products?category=${matchedCategory}`,
                 );
                 const categoryProducts = await res.json();
 
@@ -205,7 +204,7 @@ export default function Navbar() {
 
               // prod search
               const res = await fetch(
-                `http://localhost:5000/api/products/suggest?search=${value}`
+                `http://localhost:5000/api/products/suggest?search=${value}`,
               );
               const products = await res.json();
 
@@ -214,7 +213,7 @@ export default function Navbar() {
                   type: "product",
                   _id: p._id,
                   name: p.name,
-                }))
+                })),
               );
               setShowSuggestions(true);
               setActiveIndex(-1);
@@ -225,7 +224,7 @@ export default function Navbar() {
               if (e.key === "ArrowDown") {
                 e.preventDefault();
                 setActiveIndex((prev) =>
-                  prev < suggestions.length - 1 ? prev + 1 : prev
+                  prev < suggestions.length - 1 ? prev + 1 : prev,
                 );
               }
 
@@ -248,28 +247,27 @@ export default function Navbar() {
                 }
               }
 
-              //forr enter key 
+              //forr enter key
               if (e.key === "Enter" && activeIndex === -1) {
                 e.preventDefault();
                 setShowSuggestions(false);
 
-                // 🔥 check FULL category match (case-insensitive)
+                //  check FULL category match (case-insensitive)
                 const exactCategory = categories.find(
-                  (cat) => cat.toLowerCase() === searchTerm.toLowerCase()
+                  (cat) => cat.toLowerCase() === searchTerm.toLowerCase(),
                 );
 
                 if (exactCategory) {
-                  // 👉 full category search
-                  navigate(`/search?category=${encodeURIComponent(exactCategory)}`);
+                  //  full category search
+                  navigate(
+                    `/search?category=${encodeURIComponent(exactCategory)}`,
+                  );
                 } else {
-                  // 👉 normal keyword search
+                  //  normal keyword search
                   navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
                 }
               }
-
-            }
-            }
-
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -385,7 +383,23 @@ export default function Navbar() {
             horizontal: "right",
           }}
         >
-          <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              navigate("/orders");
+            }}
+          >
+            My Orders
+          </MenuItem>
+
+          <MenuItem
+            onClick={() => {
+              handleMenuClose();
+              logoutHandler();
+            }}
+          >
+            Logout
+          </MenuItem>
         </Menu>
 
         {/* CART */}

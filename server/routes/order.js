@@ -5,7 +5,7 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// CREATE ORDER
+// create order
 router.post("/", protect, async (req, res) => {
   try {
     const { orderItems, shippingAddress, paymentMethod, platformFee } =
@@ -26,7 +26,7 @@ router.post("/", protect, async (req, res) => {
       totalPrice,
     });
 
-    // CLEAR CART IN USER MODEL
+    // clear cart in user model
     await User.findByIdAndUpdate(req.user._id, {
       $set: { cart: [] },
     });
@@ -38,6 +38,19 @@ router.post("/", protect, async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Order creation failed" });
   }
+
+  // get orders for orderspage
+  router.get("/my", protect, async (req, res) => {
+    try {
+      const orders = await Order.find({ user: req.user._id }).sort({
+        createdAt: -1,
+      });
+
+      res.json(orders);
+    } catch (err) {
+      res.status(500).json({ message: "Failed to fetch orders" });
+    }
+  });
 });
 
 export default router;

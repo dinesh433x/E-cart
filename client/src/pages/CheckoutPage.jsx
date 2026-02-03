@@ -113,6 +113,8 @@ export default function CheckoutPage() {
               Order Items
             </Typography>
 
+            <Divider sx={{ mt: 0.1, mb: 0.2 }} />
+
             {items.length === 0 ? (
               <Typography color="text.secondary">Your cart is empty</Typography>
             ) : (
@@ -188,6 +190,8 @@ export default function CheckoutPage() {
               Payment Method
             </Typography>
 
+            <Divider sx={{ mt: 0.1, mb: 1.2 }} />
+
             <RadioGroup
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value)}
@@ -221,6 +225,8 @@ export default function CheckoutPage() {
             <Typography variant="h6" fontWeight={700} mb={2}>
               Order Summary
             </Typography>
+
+            <Divider sx={{ mb: 1.2 }} />
 
             <Box display="flex" justifyContent="space-between" mb={1.5}>
               <Typography>Subtotal ({items.length} items)</Typography>

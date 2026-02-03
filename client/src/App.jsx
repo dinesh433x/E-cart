@@ -15,6 +15,7 @@ import SearchResultsPage from "./pages/SearchResultsPage";
 import { clearCart } from "./redux/cartSlice";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderSuccess from "./pages/OrderSuccess.jsx";
+import OrdersPage from "./pages/OrdersPage";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ export default function App() {
           />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/orders" element={<OrdersPage />} />
         </Routes>
       </div>
 
